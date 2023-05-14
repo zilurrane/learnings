@@ -4,9 +4,9 @@ import { RetrievalQAChain } from "langchain/chains";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { input } from '@inquirer/prompts';
 
-
-export const run = async () => {
+const initialize = async () => {
   // Initialize the LLM to use to answer the question.
   const model = new OpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY
@@ -18,9 +18,21 @@ export const run = async () => {
   // Create a chain that uses the OpenAI LLM and HNSWLib vector store.
   const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
 
-  const res = await chain.call({
-    query: "Who approves compensatory off?",
-  });
-  console.log({ res });
+  return chain;
 };
-run()
+
+const answer = async (chain: RetrievalQAChain) => {
+  const question = await input({ message: 'Ask your question!' });
+  const res = await chain.call({
+    query: question,
+  });
+  console.log("\n", res.text, "\n");
+}
+
+const startApp = async () => {
+  const chain = await initialize();
+  await answer(chain);
+}
+
+startApp();
+
