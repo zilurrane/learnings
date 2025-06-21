@@ -19,7 +19,12 @@ async function personalizedPitch(course: string, role: string, wordLimit: number
         inputVariables: ["course", "role", "wordLimit"],
     });
 
-    const llm = new ChatOpenAI();
+    const llm = new ChatOpenAI({
+        // temperature: 1
+        // topP: 1,
+        // maxTokens: 10,
+        modelName: "gpt-3.5-turbo",
+    });
 
     const outputParser = new StringOutputParser();
     
