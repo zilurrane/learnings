@@ -2,7 +2,6 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import dotenv from "dotenv";
-import { LLMChain } from "langchain/chains";
 
 dotenv.config();
 
@@ -19,33 +18,22 @@ async function personalizedPitch(course: string, role: string, wordLimit: number
         inputVariables: ["course", "role", "wordLimit"],
     });
 
-    const formatedPrompt = await promptTemplate.format({
-        course,
-        role,
-        wordLimit
-    });
-    console.log(formatedPrompt);
-
     const llm = new ChatOpenAI();
 
     const outputParser = new StringOutputParser();
     
-    const legacyLLMChain = new LLMChain({
-        llm,
-        prompt: promptTemplate,
-        outputParser,
-    });
+    const lcelChain = promptTemplate.pipe(llm).pipe(outputParser);
 
-    const response = await legacyLLMChain.invoke({
+    const lcelChainResponse = await lcelChain.invoke({
         course,
         role,
         wordLimit
     });
 
-    console.log("Answer from Legacy LLM Chain:", response);
+    console.log("Answer from LCEL LLM Chain:", lcelChainResponse);
 
 }
 
-await personalizedPitch("Generative AI", "JavaScript Developer", 50);
+const formatedPrompt = await personalizedPitch("Generative AI", "JavaScript Developer", 50);
 
 // Output: Describe importance of learning Generative AI for a JavaScript Developer. Limit the output to 50 words.
