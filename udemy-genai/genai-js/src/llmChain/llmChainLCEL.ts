@@ -1,5 +1,6 @@
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { PromptTemplate } from "@langchain/core/prompts";
+import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "@langchain/openai";
 import dotenv from "dotenv";
 
@@ -22,7 +23,13 @@ async function personalizedPitch(course: string, role: string, wordLimit: number
 
     const outputParser = new StringOutputParser();
     
-    const lcelChain = promptTemplate.pipe(llm).pipe(outputParser);
+    // const lcelChain = promptTemplate.pipe(llm).pipe(outputParser);
+
+    const lcelChain = RunnableSequence.from([
+        promptTemplate,
+        llm,
+        outputParser,
+    ]);
 
     const lcelChainResponse = await lcelChain.invoke({
         course,
