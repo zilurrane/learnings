@@ -20,4 +20,4 @@ export async function loadDocuments(): Promise<Document[]> {
     return rawDocuments;
 }
 
-const rawDocuments = await loadDocuments();
+// const rawDocuments = await loadDocuments();
