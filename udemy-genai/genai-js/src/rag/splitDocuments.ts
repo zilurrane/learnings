@@ -13,11 +13,11 @@ export async function splitDocuments(rawDocuments: Document[]): Promise<Document
     return documentChunks;
 }
 
-const rawDocuments: Document[] = await loadDocuments();
-const documentChunks = await splitDocuments(rawDocuments);
-console.log(`Generated ${documentChunks.length} document chunks.`);
+// const rawDocuments: Document[] = await loadDocuments();
+// const documentChunks = await splitDocuments(rawDocuments);
+// console.log(`Generated ${documentChunks.length} document chunks.`);
 
-console.log("First 5 document chunks:");
-for (let i = 0; i < 5 && i < documentChunks.length; i++) {
-    console.log(`Chunk ${i + 1}:`, documentChunks[i].pageContent, "...");
-}  
+// console.log("First 5 document chunks:");
+// for (let i = 0; i < 5 && i < documentChunks.length; i++) {
+//     console.log(`Chunk ${i + 1}:`, documentChunks[i].pageContent, "...");
+// }  
