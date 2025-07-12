@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
-import { OpenAIEmbeddings } from '@langchain/openai';
+// import { OpenAIEmbeddings } from '@langchain/openai';
 import { Pinecone } from '@pinecone-database/pinecone';
 import cliProgress from 'cli-progress';
 
 import { loadDocuments } from './loadDocuments';
 import { splitDocuments } from './splitDocuments';
 import { PineconeStore } from '@langchain/pinecone';
+import { OllamaEmbeddings } from '@langchain/ollama';
 
 dotenv.config();
 
@@ -14,13 +15,18 @@ console.log(`Loaded ${rawDocuments.length} raw documents.`);
 const documentChunks = await splitDocuments(rawDocuments);
 console.log(`Generated ${documentChunks.length} document chunks.`);
 
-const embeddingLLM = new OpenAIEmbeddings({
-    model: 'text-embedding-3-small'
+// const embeddingLLM = new OpenAIEmbeddings({
+//     model: 'text-embedding-3-small'
+// });
+
+const embeddingLLM = new OllamaEmbeddings({
+    model: "mxbai-embed-large", // Default value
 });
+
 
 const pinecone = new Pinecone();
 
-const pineconeIndex = pinecone.Index('langchain-docs');
+const pineconeIndex = pinecone.Index('lanchain-docs-ollma');
 
 console.log('Starting to vectorize and store documents in Pinecone...');
 

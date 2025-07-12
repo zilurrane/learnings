@@ -1,11 +1,12 @@
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+// import { ChatOpenAI } from "@langchain/openai";
 import { createRetriever } from "./retriever";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { formatDocumentsAsString } from "langchain/util/document";
 import { chat, ChatHandler } from "../utils/chat";
 import { AIMessage, BaseMessage, HumanMessage } from "@langchain/core/messages";
+import { ChatOllama } from "@langchain/ollama";
 
 export const prompt = ChatPromptTemplate.fromMessages(
     [[
@@ -20,9 +21,16 @@ export const prompt = ChatPromptTemplate.fromMessages(
     ]
 );
 
-const llm = new ChatOpenAI({
-    model: 'gpt-3.5-turbo',
-    maxTokens: 500
+// const llm = new ChatOpenAI({
+//     model: 'gpt-3.5-turbo',
+//     maxTokens: 500,
+// });
+
+const llm = new ChatOllama({
+  model: "llama3.2:3b",
+  temperature: 0,
+  maxRetries: 2,
+  // other params...
 });
 
 const outputParser = new StringOutputParser();

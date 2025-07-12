@@ -1,18 +1,22 @@
 
 import { VectorStoreRetriever } from "@langchain/core/vectorstores";
-import { OpenAIEmbeddings } from "@langchain/openai";
+// import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { Pinecone } from "@pinecone-database/pinecone";
 import dotenv from 'dotenv';
+import { OllamaEmbeddings } from "@langchain/ollama";
 
 dotenv.config();
 
 export async function createRetriever(): Promise<VectorStoreRetriever> {
-    const embeddingLLM = new OpenAIEmbeddings({
-        model: 'text-embedding-3-small'
+    // const embeddingLLM = new OpenAIEmbeddings({
+    //     model: 'text-embedding-3-small'
+    // });
+    const embeddingLLM = new OllamaEmbeddings({
+        model: "mxbai-embed-large", // Default value
     });
     const pinecone = new Pinecone();
-    const pineconeIndex = pinecone.Index('langchain-docs');
+    const pineconeIndex = pinecone.Index('lanchain-docs-ollma');
 
     const vectorstore = await PineconeStore.fromExistingIndex(embeddingLLM, {
         pineconeIndex
